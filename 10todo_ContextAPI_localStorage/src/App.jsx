@@ -28,7 +28,7 @@ function App() {
 		if (todos && todos.length > 0) {
 			setTodo(todos);
 		}
-	}, [])
+	}, []) // this will run only when this component is mounted (on initial render of App component)
 
 	useEffect(() => {
 		localStorage.setItem("todos", JSON.stringify(todo));
