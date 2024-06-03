@@ -7,12 +7,12 @@ import { useSelector } from 'react-redux';
 function AllPosts() {
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
-    const userId = useSelector(state => state.auth.userData.$id);
+    const userId = useSelector(state => state.auth.userData);
 
     appwriteService
 		.getPosts([
 			Query.equal("status", "active"),
-			Query.equal("userId", userId),
+			Query.equal("userId", userId.$id),
 		])
 		.then((res) => {
 			setPosts(res.documents);
