@@ -4,6 +4,8 @@ import appwriteService from '../../appwrite/postBlog.service.js'
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Input, RTE, Select, Button } from '../index.js'
+import axios from 'axios';
+import conf from '../../conf/conf.js';
 
 function PostForm({ post }) {
     const { register, handleSubmit, watch, setValue, control, getValues } = useForm({
@@ -20,26 +22,41 @@ function PostForm({ post }) {
     const submitHandler = async (data) => {
         if (post) {
             // Update post
-            const file = await appwriteService.uploadFile(data.image[0]); 
-            if (file) {
-                appwriteService.deleteFile(post.featuredImage);
-            }
-            const dbPost = await appwriteService.updatePost(post.$id, {...data, featuredImage: file?.$id || undefined});
+            // const file = await appwriteService.uploadFile(data.image[0]); 
+            // if (file) {
+            //     appwriteService.deleteFile(post.featuredImage);
+            // }
+            // const dbPost = await appwriteService.updatePost(post.$id, {...data, featuredImage: file?.$id || undefined});
 
-            if (dbPost) {
-                navigate(`/post/${dbPost.$id}`);
-            }
+            // if (dbPost) {
+            //     navigate(`/post/${dbPost.$id}`);
+            // }
+            const featuredImage = data.image[0];
+            axios.post(`${conf.backendUrl}/articles/update-article/${post._id}`, { ...data, featuredImage })
+                .then((res) => {
+                    if (res.status === 200) {
+                        navigate(`/post/${post._id}`);
+                    }
+                });
+
         } else {
             // Create post
-            const file = await appwriteService.uploadFile(data.image[0]);
-            if (file) {
-                const fileId = file.$id;
-				data.featuredImage = fileId;
-                const dbPost = await appwriteService.createPost({...data, userId: userData.$id});
-                if (dbPost) {
-                    navigate(`/post/${dbPost.$id}`);
-                }
-            }
+            // const file = await appwriteService.uploadFile(data.image[0]);
+            // if (file) {
+            //     const fileId = file.$id;
+			// 	data.featuredImage = fileId;
+            //     const dbPost = await appwriteService.createPost({...data, userId: userData.$id});
+            //     if (dbPost) {
+            //         navigate(`/post/${dbPost.$id}`);
+            //     }
+            // }
+            const featuredImage = data.image[0];
+            axios.post(`${conf.backendUrl}/articles/create-article`, { ...data, featuredImage })
+                .then((res) => {
+                    if (res.status === 200) {
+                        navigate(`/post/${res.data._id}`);
+                    }
+                });
         }
     }
 

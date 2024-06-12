@@ -2,12 +2,20 @@ import React from "react";
 import { logout as storeLogout } from "../../store/authenticationSlice.js";
 import { useDispatch, useSelector } from "react-redux";
 import AuthenticationService from "../../appwrite/auth.service.js";
+import axios from "axios";
+import conf from "../../conf/conf.js";
 
 function LogoutBtn() {
 	const dispatch = useDispatch();
 	const logoutHandler = () => {
-		AuthenticationService.logout().then(() => {
-			dispatch(storeLogout());
+		// AuthenticationService.logout().then(() => {
+		// 	dispatch(storeLogout());
+		// });
+		axios.post(`${conf.backendUrl}/users/logout`, {})
+		.then((res) => {
+			if (res.status === 200) {
+				dispatch(storeLogout());
+			}
 		});
 	};
 
