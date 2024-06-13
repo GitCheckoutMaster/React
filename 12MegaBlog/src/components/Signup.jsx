@@ -6,6 +6,8 @@ import AuthenticationService from "../appwrite/auth.service.js";
 import { useDispatch } from "react-redux";
 import { login } from "../store/authenticationSlice.js";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import conf from "../conf/conf.js";
 
 function Signup() {
 	const dispatch = useDispatch();
@@ -16,15 +18,22 @@ function Signup() {
 	const signup = async (data) => {
 		setError("");
 		try {
-			const userData = await AuthenticationService.createAccount(data);
-			if (userData) {
-				const userData = await AuthenticationService.getCurrentUser();
-				console.log(userData);
-				if (userData) {
-					dispatch(login({userData}));
-				}
-				navigate("/");
-			}
+			// const userData = await AuthenticationService.createAccount(data);
+			// if (userData) {
+			// 	const userData = await AuthenticationService.getCurrentUser();
+			// 	console.log(userData);
+			// 	if (userData) {
+			// 		dispatch(login({userData}));
+			// 	}
+			// 	navigate("/");
+			// }
+			axios.post(`${conf.backendUrl}/users/register`, data, { withCredentials: true })
+				.then((res) => {
+					if (res.data.status === 200) {
+						dispatch(login({userData: res.data.data}));
+						navigate("/");
+					}
+				});
 		} catch (error) {
 			setError("from here " + error.message);
 		}
@@ -58,7 +67,7 @@ function Signup() {
 					<div className="space-y-5">
 						<Input
 							label="Name: "
-							palceholder="Enter your name"
+							placeholder="Enter your name:"
 							{...register("name", { required: true })}
 						/>
 						<Input

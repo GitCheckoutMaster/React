@@ -11,9 +11,9 @@ function LogoutBtn() {
 		// AuthenticationService.logout().then(() => {
 		// 	dispatch(storeLogout());
 		// });
-		axios.post(`${conf.backendUrl}/users/logout`, {})
+		axios.post(`${conf.backendUrl}/users/logout`, {}, { withCredentials: true })
 		.then((res) => {
-			if (res.status === 200) {
+			if (res.data.status === 200) {
 				dispatch(storeLogout());
 			}
 		});

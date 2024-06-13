@@ -2,13 +2,12 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { postBlog } from '../appwrite/postBlog.service'
 
-function PostCard({$id, title, featuredImage}) {
-    const post = new postBlog()
+function PostCard({slug, title, featuredImage}) {
     return (
-        <Link to={`/post/${$id}`}>
+        <Link to={`/post/${slug}`}>
             <div className='w-full bg-gray-100 rounded-xl p-4'>
                 <div className='w-full justify-center mb-4'>
-                    <img src={post.getFilePreview(featuredImage)} alt={title} className='rounded-xl' />
+                    <img src={featuredImage} alt={title} className='rounded-xl' />
                 </div>
                 <h2 className='text-xl font-bold'>{title}</h2>
             </div>

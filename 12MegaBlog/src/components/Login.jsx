@@ -5,6 +5,8 @@ import { Button, Input, Logo } from "./index.js";
 import { useDispatch } from "react-redux";
 import AuthenticationService from "../appwrite/auth.service.js";
 import { useForm } from "react-hook-form";
+import axios from "axios";
+import conf from "../conf/conf.js";
 
 function Login() {
 	const dispatch = useDispatch();
@@ -15,16 +17,23 @@ function Login() {
 	const login = async (data) => {
 		setError("");
 		try {
-			const session = await AuthenticationService.login(data);
+			// const session = await AuthenticationService.login(data);
 
-			if (session) {
-				const userData = await AuthenticationService.getCurrentUser();
-				console.log(userData)
-				if (userData) {
-					dispatch(storeLogin(userData));
-				}
-				navigate("/");
-			}
+			// if (session) {
+			// 	const userData = await AuthenticationService.getCurrentUser();
+			// 	console.log(userData)
+			// 	if (userData) {
+			// 		dispatch(storeLogin(userData));
+			// 	}
+			// 	navigate("/");
+			// }
+			axios.post(`${conf.backendUrl}/users/login`, data, { withCredentials: true })
+				.then((res) => {
+					if (res.data.status === 200) {
+						dispatch(storeLogin({userData: res.data.data}));
+						navigate("/");
+					}
+				})
 		} catch (error) {
 			setError(error.message);
 		}

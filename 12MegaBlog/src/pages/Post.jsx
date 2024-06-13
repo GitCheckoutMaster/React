@@ -4,33 +4,52 @@ import appwriteService from "../appwrite/postBlog.service.js";
 import { useSelector } from "react-redux";
 import { Container, Button } from "../components/index.js";
 import parse from "html-react-parser";
+import axios from "axios";
+import conf from "../conf/conf.js";
 
 function Post() {
 	const [post, setPost] = useState(null);
 	const { slug } = useParams();
 	const navigate = useNavigate();
 	const userData = useSelector((state) => state.auth.userData);
-	const isAuthor = post && userData ? post.userId === userData.$id : false;
+	let isAuthor = post && userData ? post.userid === userData._id : false;
+	
+	useEffect(() => {
+		isAuthor = post && userData ? post.userid === userData._id : false;
+	}, [post, userData]);
 
 	useEffect(() => {
 		if (slug) {
-			appwriteService.getPost(slug).then((post) => {
-				if (post) setPost(post);
-				else navigate("/");
-			});
+			// appwriteService.getPost(slug).then((post) => {
+				// 	if (post) setPost(post);
+				// 	else navigate("/");
+				// });
+				axios.get(`${conf.backendUrl}/articles/${slug}`, { withCredentials: true })
+				.then((res) => {
+					if (res.data.status === 200) {
+						setPost(res.data.data);
+					} else {
+						navigate("/");
+					}
+				});
 		} else {
 			navigate("/");
 		}
 	}, [slug, navigate]);
 	
-	
 	const deletePost = () => {
-		appwriteService.deletePost(post.$id).then((res) => {
-			if (res) {
-				appwriteService.deleteFile(post.featuredImage);
-				navigate("/");
-			}
-		});
+		// appwriteService.deletePost(post.$id).then((res) => {
+		// 	if (res) {
+		// 		appwriteService.deleteFile(post.featuredImage);
+		// 		navigate("/");
+		// 	}
+		// });
+		axios.delete(`${conf.backendUrl}/articles/${post.slug}`, { withCredentials: true })
+			.then((res) => {
+				if (res.data.status === 200) {
+					navigate("/");
+				}
+			});
 	};
 
 	return (
@@ -39,16 +58,14 @@ function Post() {
 				<Container>
 					<div className="w-full flex justify-center mb-4 relative border rounded-xl p-2">
 						<img
-							src={appwriteService.getFilePreview(
-								post.featuredImage
-							)}
+							src={post.featuredImage}
 							alt={post.title}
 							className="rounded-xl"
 						/>
 
 						{isAuthor && (
 							<div className="absolute right-6 top-6">
-								<Link to={`/edit-post/${post.$id}`}>
+								<Link to={`/edit-post/${post.slug}`}>
 									<Button
 										bgColor="bg-green-500"
 										className="mr-3"

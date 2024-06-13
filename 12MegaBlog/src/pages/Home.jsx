@@ -1,17 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import appwriteService from '../appwrite/postBlog.service.js';
 import { Container, PostCard } from '../components/index.js';
+import axios from 'axios';
+import conf from '../conf/conf.js';
 
 function Home() {
     const [post, setPost] = useState([]);
 
     useEffect(() => {
-        appwriteService
-			.getPosts([])
-			.then((res) => {
-				if (res) setPost(res.documents);
-			});
-    }, [])
+        // appwriteService
+		// 	.getPosts([])
+		// 	.then((res) => {
+		// 		if (res) setPost(res.documents);
+		// 	});
+        axios.get(`${conf.backendUrl}/articles/get-articles/`, { withCredentials: true })
+            .then((res) => {
+                if (res.data.status === 200) {
+                    setPost(res.data.data);
+                }
+            })
+            .catch((err) => {
+                console.log(err.message);
+            })
+    }, []);
 
     if (post.length > 0) {
         return (
@@ -20,7 +31,7 @@ function Home() {
                     <div className="flex flex-wrap">
                         {post.map((item) => {
                             return (
-                                <div key={post.$id} className="p-2 w-1/4">
+                                <div key={item._id} className="p-2 w-1/4">
                                     <PostCard {...item} />
                                 </div>
                             )
