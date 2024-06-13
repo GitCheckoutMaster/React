@@ -1,6 +1,5 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { postBlog } from '../appwrite/postBlog.service'
 
 function PostCard({slug, title, featuredImage}) {
     return (

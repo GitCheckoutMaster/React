@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Button, Input, Logo } from "./index.js";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import AuthenticationService from "../appwrite/auth.service.js";
 import { useDispatch } from "react-redux";
 import { login } from "../store/authenticationSlice.js";
 import { Link } from "react-router-dom";

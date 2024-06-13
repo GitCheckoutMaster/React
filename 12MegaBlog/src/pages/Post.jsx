@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
-import appwriteService from "../appwrite/postBlog.service.js";
 import { useSelector } from "react-redux";
 import { Container, Button } from "../components/index.js";
 import parse from "html-react-parser";
@@ -20,10 +19,6 @@ function Post() {
 
 	useEffect(() => {
 		if (slug) {
-			// appwriteService.getPost(slug).then((post) => {
-				// 	if (post) setPost(post);
-				// 	else navigate("/");
-				// });
 				axios.get(`${conf.backendUrl}/articles/${slug}`, { withCredentials: true })
 				.then((res) => {
 					if (res.data.status === 200) {
@@ -38,12 +33,6 @@ function Post() {
 	}, [slug, navigate]);
 	
 	const deletePost = () => {
-		// appwriteService.deletePost(post.$id).then((res) => {
-		// 	if (res) {
-		// 		appwriteService.deleteFile(post.featuredImage);
-		// 		navigate("/");
-		// 	}
-		// });
 		axios.delete(`${conf.backendUrl}/articles/${post.slug}`, { withCredentials: true })
 			.then((res) => {
 				if (res.data.status === 200) {

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import appwriteService from '../appwrite/postBlog.service.js';
 import { Container, PostCard } from '../components/index.js';
 import axios from 'axios';
 import conf from '../conf/conf.js';
@@ -8,11 +7,6 @@ function Home() {
     const [post, setPost] = useState([]);
 
     useEffect(() => {
-        // appwriteService
-		// 	.getPosts([])
-		// 	.then((res) => {
-		// 		if (res) setPost(res.documents);
-		// 	});
         axios.get(`${conf.backendUrl}/articles/get-articles/`, { withCredentials: true })
             .then((res) => {
                 if (res.data.status === 200) {

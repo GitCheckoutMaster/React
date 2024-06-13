@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import appwriteService from "../../appwrite/postBlog.service.js";
 import { useNavigate } from "react-router-dom";
 import { Input, RTE, Select, Button } from "../index.js";
 import axios from "axios";
@@ -133,9 +132,7 @@ function PostForm({ post }) {
 				{post && (
 					<div className="w-full mb-4">
 						<img
-							src={appwriteService.getFilePreview(
-								post.featuredImage
-							)}
+							src={post.featuredImage}
 							alt={post.title}
 							className="rounded-lg"
 						/>

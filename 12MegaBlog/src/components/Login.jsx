@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { login as storeLogin } from "../store/authenticationSlice.js";
 import { Button, Input, Logo } from "./index.js";
 import { useDispatch } from "react-redux";
-import AuthenticationService from "../appwrite/auth.service.js";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import conf from "../conf/conf.js";

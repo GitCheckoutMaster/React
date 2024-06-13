@@ -1,6 +1,5 @@
 import React from 'react'
 import { Container, PostForm } from "../components/index.js"
-import { useSelector } from 'react-redux'
 
 function AddPost() {
 

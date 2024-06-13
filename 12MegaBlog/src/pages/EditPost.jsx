@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import appwriteService from '../appwrite/postBlog.service.js';
 import { Container, PostForm } from '../components/index.js';
 import axios from 'axios';
 import conf from '../conf/conf.js';
@@ -12,9 +11,6 @@ function EditPost() {
 
     useEffect(() => {
         if (slug) {
-            // appwriteService.getPost(slug).then((res) => {
-            //     setPost(res);
-            // });
             axios.get(`${conf.backendUrl}/articles/${slug}`, { withCredentials: true })
                 .then((res) => {
                     setPost(res.data.data);

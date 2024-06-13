@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import appwriteService from '../appwrite/postBlog.service.js'
-import { PostCard, Container } from "../components/index.js";
-import { Query } from 'appwrite';
+import { PostCard, Container } from "../components/index.js"
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import conf from '../conf/conf.js';
